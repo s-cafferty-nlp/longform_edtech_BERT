@@ -78,6 +78,7 @@ class Longform():
                     counter += 1
         
         letters = ['A. ','B. ','C. ','D. ','E. ','F. ','G. ','H. ']
+        
         formatted_answers = []
         for idx, multiple_choice in enumerate(alternatives_list):
             formatted_answers.append(f'{idx+1}.')
@@ -85,17 +86,38 @@ class Longform():
                 formatted_answers.append(letters[i] + choice)
             formatted_answers.append('')
 
-        prompt = ('. ').join(prompt_sentences)
+        answer_dictionary = {}
+        
+        for idx, multiple_choice in enumerate(alternatives_list):
+            answer_dictionary[idx] = []
+            for i, choice in enumerate(multiple_choice):
+                answer_dictionary[idx].append(letters[i] + choice.lower())
 
-        results = [prompt] + ['',''] + formatted_answers
+        formatted_prompts = []
+        answer_number = 0
+        for sent in prompt_sentences:
+            pattern = re.compile(r"(\(\d+\))")
+            answers = re.findall(pattern,sent)
+            formatted_prompts.append(sent+'. ')
+            if len(answers) > 0:
+                for ans in answers:
+                    formatted_prompts.append('')
+                    formatted_prompts += answer_dictionary[answer_number]
+                    answer_number += 1 
+                    formatted_prompts.append('')
 
-        return results, answer_list
+
+        # prompt = ('').join(prompt_sentences)
+
+        # results = [prompt] + ['',''] + formatted_answers
+
+        return formatted_prompts, answer_list
     
     def chatGPT(self, text):
         url = "https://api.openai.com/v1/completions"
         headers = {
         "Content-Type": "application/json",
-        "Authorization": "Bearer <YOUR OPEN_AI API TOKEN>",
+        "Authorization": "Bearer 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",
         }
         data = { 
         "model": "text-davinci-003",
@@ -136,6 +158,8 @@ class Longform():
         else:
             return question_output, answers_output
     
+
+
 
 
 
