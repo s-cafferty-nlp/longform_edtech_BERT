@@ -117,7 +117,7 @@ class Longform():
         url = "https://api.openai.com/v1/completions"
         headers = {
         "Content-Type": "application/json",
-        "Authorization": "Bearer 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",
+        "Authorization": "Bearer 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",
         }
         data = { 
         "model": "text-davinci-003",
@@ -126,8 +126,9 @@ class Longform():
         "temperature": 1.0,
         }
         response = requests.post(url, headers=headers, json=data)
-        output = response.json()['choices'][0]['text']
         
+        output = response.json()['choices'][0]['text']
+        # print(response)
         return output
     
     def generate_longform_questions(self, topics_list, save = True, ans_path='../data/answers.txt', question_path='../data/questions.txt', top_k=2000, offset=500, top_words=10, choices=5):
